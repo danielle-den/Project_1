@@ -29,18 +29,6 @@ void part_1(){
     }
 }
 
-void part_2(){
-
-}
-
-void part_3(){
-
-}
-
-void part_4(){
-   
-}
-
 void part_5(){
     // Create 3 high valued arrays of cache memory
     int stack1[100], stack2[200], stack3[300];
