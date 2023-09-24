@@ -10,57 +10,92 @@
 #include <ctime>
 #include <chrono>
 
-int first_test(int matrix[60][60]){
-    // Update each element row by row
-    auto start = std::chrono::high_resolution_clock::now();
-
-    for(int i = 0; i < 60; i++){
-        for(int j = 0; j < 60; j++){
-            matrix[i][j] *= 1;
-        }
-    }
-    
-    auto time = std::chrono::high_resolution_clock::now() - start;
-    std::cout << "first: " << (int) time.count() << std::endl;
-    return (int) time.count();
-}
-
-
-int second_test(int matrix[60][60]){
-    // Update each element randomly
-    srand((unsigned) time(NULL)); // use current time as seed for random generator
-    
-    
-    auto start = std::chrono::high_resolution_clock::now();
-
-    for(int i = 0; i < 60; i++){
-        for(int j = 0; j < 60; j++){
-            matrix[std::rand() % 60][std::rand() % 60] /= 1;
-        }
-    }
-    
-    auto time = std::chrono::high_resolution_clock::now() - start;
-    
-    std::cout << "second: " << (int) time.count() << std::endl;
-    return (int) time.count();
-}
-
-int main(int argc, const char * argv[]) {
-    // Make a matrix
-    int matrix[60][60];
-    int first_array[10];
-    int second_array[10];
-    
-    for(int i = 0; i < 60; i++){
-        for(int j = 0; j < 60; j++){
+void first_test(){
+    // Create matrix on the heap
+    int **matrix = new int*[30];
+    for(int i = 0; i < 70; i++){
+        matrix[i] = new int[30];
+        for(int j = 0; j < 30; j++){
             matrix[i][j] = i+j;
         }
     }
     
-    for(int i = 0; i < 10; i++){
-        first_array[i] = first_test(matrix);
-        second_array[i] = second_test(matrix);
+    
+    // Update each element row by row
+    
+    for(int i = 0; i < 30; i++){
+        for(int j = 0; j < 30; j++){
+            auto start = std::chrono::high_resolution_clock::now();
+            matrix[i][j] *= 1;
+            auto time = std::chrono::high_resolution_clock::now() - start;
+            std::cout << time.count() << std::endl;
+
+        }
     }
+    
+}
+
+void third_test(){
+    int **matrix = new int*[30];
+    for(int i = 0; i < 30; i++){
+        matrix[i] = new int[30];
+        for(int j = 0; j < 30; j++){
+            matrix[i][j] = i+j;
+        }
+    }
+    
+    for(int i = 0; i < 150; i++){
+        auto start = std::chrono::high_resolution_clock::now();
+        matrix[10][10] *= 1;
+        auto time = std::chrono::high_resolution_clock::now() - start;
+        std::cout << time.count() << std::endl;
+    }
+}
+
+
+void second_test(){
+    // Create matrix on the heap and initialize them
+    int **matrix = new int*[30];
+    for(int i = 0; i < 30; i++){
+        matrix[i] = new int[30];
+        for(int j = 0; j < 30; j++){
+            matrix[i][j] = i+j;
+        }
+    }
+    
+    srand((unsigned) time(NULL)); // use current time as seed for random generator
+
+    int ii[900];
+    int jj[900];
+    
+    for(int i = 0; i < 30; i++){
+        for(int j = 0; j < 30; j++){
+            int i_index = std::rand() % 30;
+            int j_index = std::rand() % 30;
+            ii[i+j] = i_index;
+            jj[i+j] = j_index;
+            
+            auto start = std::chrono::high_resolution_clock::now();
+            matrix[i_index][j_index] *= 1;
+            auto time = std::chrono::high_resolution_clock::now() - start;
+            std::cout << (int) time.count() << std::endl;
+
+        }
+    }
+    std::cout << std::endl;
+    for(int i = 0; i < 100; i++){
+        std::cout << ii[i] << " " << jj[i] << std::endl;
+    }
+}
+
+int main(int argc, const char * argv[]) {
+    // Make a matrix
+
+    
+    first_test();
+    second_test();
+    third_test();
+    
     
     return 0;
 }
